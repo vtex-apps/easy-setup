@@ -1,0 +1,134 @@
+import { ExternalClient, IOContext } from '@vtex/api'
+import {
+  InventoryData,
+  DockData,
+  FreightValueData,
+  WarehouseData,
+} from '../dataSources/logisticsData'
+
+import { SKUData } from '../dataSources/skuData'
+
+import axios from 'axios'
+
+import { sleep } from '../utils'
+
+export interface ILogistics {
+  setInventory(): any
+  updateDock(): any
+  setLogistics(): any
+  setFreightValues(): any
+  updateWarehouse(): any
+}
+
+export default class Logistics extends ExternalClient implements ILogistics {
+  constructor(ctx: IOContext) {
+    super(
+      `http://${
+        JSON.parse(JSON.stringify(ctx)).request.header['x-vtex-account']
+      }.vtexcommercestable.com.br`,
+      ctx
+    )
+  }
+
+  public getHeaders = () => {
+    return {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+      'Proxy-Authorization': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-credential'],
+      'X-VTEX-API-AppKey': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-api-appkey'],
+      'X-VTEX-API-AppToken': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-api-apptoken'],
+      'X-Vtex-Use-Https': true,
+    }
+  }
+
+  public setFreightValues = async () => {
+    console.log('Set Freight Values...')
+    try {
+      FreightValueData.forEach(async freightValue => {
+        console.log(JSON.stringify(freightValue))
+        await axios({
+          method: 'POST',
+          url: `${this.options?.baseURL}/api/logistics/pvt/configuration/freights/1/values/update`,
+          headers: this.getHeaders(),
+          data: freightValue,
+        })
+        sleep(1000)
+      })
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public updateDock = async () => {
+    console.log('Update Dock...')
+    try {
+      DockData.forEach(async dock => {
+        await axios({
+          method: 'POST',
+          url: `${this.options?.baseURL}/api/logistics/pvt/configuration/docks`,
+          headers: this.getHeaders(),
+          data: dock,
+        })
+      })
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public setInventory = async () => {
+    console.log('Set Inventories...')
+    try {
+      for (const sku of SKUData) {
+        await axios({
+          method: 'PUT',
+          url: `${this.options?.baseURL}/api/logistics/pvt/inventory/skus/${sku.Id}/warehouses/1_1`,
+          headers: this.getHeaders(),
+          data: InventoryData,
+        })
+      }
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public updateWarehouse = async () => {
+    console.log('Update Warehouse...')
+    try {
+      return await axios({
+        method: 'POST',
+        url: `${this.options?.baseURL}/api/logistics/pvt/configuration/warehouses`,
+        headers: this.getHeaders(),
+        data: WarehouseData,
+      }).then(() => {
+        return true
+      })
+    } catch (e) {
+      return false
+    }
+  }
+
+  public setLogistics = async () => {
+    try {
+      const inventoryRes = await this.setInventory()
+      const dockRes = await this.updateDock()
+      const freightValuesRes = await this.setFreightValues()
+      const warehouseRes = await this.updateWarehouse()
+
+      return inventoryRes && dockRes && freightValuesRes && warehouseRes
+        ? true
+        : false
+    } catch (e) {
+      return false
+    }
+  }
+}

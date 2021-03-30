@@ -1,0 +1,452 @@
+import { ExternalClient, IOContext, InstanceOptions } from '@vtex/api'
+import { BrandData } from '../../dataSources/brandData'
+import { CategoriesData } from '../../dataSources/categoryData'
+import { GroupData, GroupResponse } from '../../dataSources/groupData'
+import { FieldsData, FieldResponse } from '../../dataSources/fieldsData'
+import { FieldValuesData } from '../../dataSources/fieldValuesData'
+import { ProductData } from '../../dataSources/productData'
+import { SKUData, SKUKitData } from '../../dataSources/skuData'
+import { GetImages } from '../../dataSources/imageData'
+import { sleep } from '../../utils'
+import {
+  BrandSubCollectionData,
+  CollectionData,
+  CollectionResponse,
+  SubCollectionData,
+  SubCollectionResponse,
+} from '../../dataSources/collectionData'
+import {
+  AttachmentData,
+  AttachmentResponse,
+  SkuAttachmentData,
+  SubscriptionData,
+} from '../../dataSources/attachmentData'
+
+export interface ICatalog {
+  createBrand(): any
+  createCollection(): any
+  createCategories(): any
+  createSkuSpecifications(): any
+  createProduct(): any
+  setImages(skuData: any): any
+  createGroup(): any
+  getFieldsByCategory(categoryId: any): any
+  setSpecifications(categoryId: any): any
+  createAttachment(): any
+  setSkuAttachment(skuId: any): any
+  setSubscription(): any
+  setSkuSubscription(skuId: any): any
+}
+
+export default class Catalog extends ExternalClient implements ICatalog {
+  constructor(ctx: IOContext, options?: InstanceOptions) {
+    super(`http://${ctx.account}.vtexcommercestable.com.br`, ctx, {
+      ...options,
+      timeout: 30000,
+      params: {
+        ...options?.params,
+        an: ctx.account,
+      },
+      headers: {
+        ...options?.headers,
+        VtexIdclientAutCookie: ctx.authToken,
+      },
+    })
+  }
+
+  public createBrand = async () => {
+    console.log('Creating Brand...')
+    try {
+      await this.http.post('/api/catalog/pvt/brand', BrandData)
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public createCollection = async () => {
+    console.log('Creating Collection...')
+    try {
+      return await this.http
+        .postRaw<CollectionResponse>(
+          '/api/catalog/pvt/collection',
+          CollectionData
+        )
+        .then(async res => {
+          return await this.createSubCollection(res.data.Id)
+        })
+    } catch (e) {
+      return false
+    }
+  }
+
+  public createSubCollection = async (collectionId: any) => {
+    console.log('Creating SubCollection...')
+    try {
+      return await this.http
+        .postRaw<SubCollectionResponse>(
+          '/api/catalog/pvt/subcollection',
+          SubCollectionData(collectionId)
+        )
+        .then(async res => {
+          return await this.setBrandSubCollection(res.data.Id)
+        })
+    } catch (e) {
+      return false
+    }
+  }
+
+  public setBrandSubCollection = async (subCollectionId: any) => {
+    console.log('Setting Brand SubCollection...')
+    try {
+      await this.http.post(
+        `/api/catalog/pvt/subcollection/${subCollectionId}/brand`,
+        BrandSubCollectionData
+      )
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public createCategories = async () => {
+    console.log('Creating Categories...')
+    try {
+      for (const categoryData of CategoriesData) {
+        await this.http.post(`/api/catalog/pvt/category`, categoryData)
+        await sleep(250)
+      }
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public createGroup = async () => {
+    console.log('Creating Group...')
+    try {
+      return await this.http
+        .postRaw<GroupResponse>(
+          'api/catalog_system/pvt/specification/group',
+          GroupData
+        )
+        .then(res => {
+          return res.data.Id
+        })
+    } catch (e) {
+      return 0
+    }
+  }
+
+  public createFields = async (groupId: any) => {
+    try {
+      console.log('Creating Fields...')
+
+      for (const fieldData of FieldsData(groupId)) {
+        await this.http
+          .postRaw('/api/catalog_system/pvt/specification/field', fieldData)
+          .then(async res => {
+            console.log('Field: ' + res.data)
+            await this.createFieldValue(fieldData.CategoryId, res.data)
+            sleep(200)
+          })
+      }
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public createFieldValue = async (categoryId: any, fieldId: any) => {
+    console.log('Creating Field Values...')
+    try {
+      const indexes = await this.getAllFieldValuesIndexes(
+        FieldValuesData(fieldId),
+        categoryId
+      )
+
+      for (const index of indexes) {
+        for (const fieldValue of FieldValuesData(fieldId)[index].FieldValues) {
+          await this.http.post(
+            '/api/catalog_system/pvt/specification/fieldValue',
+            fieldValue
+          )
+          sleep(200)
+        }
+      }
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public createSkuSpecifications = async () => {
+    try {
+      const groupId = await this.createGroup()
+
+      return groupId > 0 ? await this.createFields(groupId) : false
+    } catch (e) {
+      return false
+    }
+  }
+
+  public createProduct = async () => {
+    console.log('Creating Products...')
+    try {
+      for (const product of ProductData) {
+        await this.http.post('/api/catalog/pvt/product', product)
+        sleep(300)
+        await this.createSku(product)
+      }
+
+      sleep(300)
+      await this.createAttachment()
+      await this.setSubscription()
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public createSku = async (product: any) => {
+    console.log('Creating Skus...')
+    try {
+      for (const sku of SKUData) {
+        if (sku.ProductId == product.Id) {
+          await this.http.post('/api/catalog/pvt/stockkeepingunit', sku)
+          sleep(300)
+
+          if (sku.Id == 880390 || sku.Id == 880400) {
+            await this.setSkuKit(sku.Id)
+            sleep(300)
+          }
+          if (product.CategoryId == 9281) {
+            await this.setSkuAttachment(sku.Id)
+            sleep(300)
+          }
+
+          await this.setSpecifications(product.CategoryId)
+          await this.setImages(sku)
+        }
+      }
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public setSkuKit = async (SkuId: any) => {
+    console.log('Setting SkuKit...')
+    try {
+      for (const SkuKit of SKUKitData) {
+        if (SkuId == SkuKit.StockKeepingUnitParent) {
+          await this.http.post('/api/catalog/pvt/stockkeepingunitkit', SkuKit)
+        }
+      }
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public setSpecifications = async (categoryId: any) => {
+    console.log('Setting Specifications...')
+    try {
+      const fieldData: any = await this.getFieldsByCategory(categoryId)
+
+      if (JSON.stringify(fieldData) == '[]') {
+        return true
+      }
+
+      var fieldValuesData = await this.getFieldValueByField(
+        fieldData[0].FieldId
+      )
+
+      for (const sku of SKUData) {
+        const skuSpecData = await this.getFieldBySku(fieldValuesData, sku.Name)
+
+        if (JSON.stringify(skuSpecData) !== undefined) {
+          console.log(JSON.stringify(skuSpecData) + '-' + sku.Id)
+
+          await this.http
+            .post(
+              `/api/catalog/pvt/stockkeepingunit/${sku.Id}/specification`,
+              skuSpecData
+            )
+            .then(() => {
+              sleep(5000)
+            })
+        }
+      }
+
+      return true
+    } catch (e) {
+      console.log('setSpec: ' + e)
+      return false
+    }
+  }
+
+  public getFieldsByCategory = async (categoryId: any) => {
+    console.log('Get Fields...')
+    try {
+      return await this.http
+        .getRaw<FieldResponse>(
+          `/api/catalog_system/pub/specification/field/listByCategoryId/${categoryId}`
+        )
+        .then(res => {
+          return res.data
+        })
+    } catch (e) {
+      return []
+    }
+  }
+
+  public getFieldValueByField = async (_fieldId: any) => {
+    console.log('Getting Field Values...')
+    try {
+      const specData: any[] = []
+
+      return await this.http
+        .getRaw(`/api/catalog_system/pub/specification/fieldvalue/${_fieldId}`)
+        .then(res => {
+          const _fieldValue = res.data
+          specData.push({ fieldId: _fieldId, fieldValues: _fieldValue })
+          return specData
+        })
+    } catch (e) {
+      return []
+    }
+  }
+
+  private getAllFieldValuesIndexes = async (
+    FieldValuesData: any,
+    categoryId: any
+  ) => {
+    let indexes = [],
+      i: number
+    for (i = 0; i < FieldValuesData.length; i++)
+      if (FieldValuesData[i].CategoryId === categoryId) indexes.push(i)
+    return indexes
+  }
+
+  private getFieldBySku = async (specData: any, skuName: any) => {
+    for (let i = 0; i < specData[0].fieldValues.length; i++) {
+      if (specData[0].fieldValues[i].Value === skuName) {
+        return {
+          FieldId: specData[0].fieldId,
+          FieldValueId: specData[0].fieldValues[i].FieldValueId,
+        }
+      }
+    }
+
+    return
+  }
+
+  public setImages = async (skuData: any) => {
+    console.log('Setting Images...')
+    try {
+      const images = GetImages(skuData.ProductId)
+
+      for (const img of images) {
+        await this.http.post(
+          `/api/catalog/pvt/stockkeepingunit/${skuData.Id}/file`,
+          img
+        )
+      }
+
+      return true
+    } catch (e) {
+      return false
+    }
+  }
+
+  public createAttachment = async () => {
+    console.log('Creating Attachment...')
+    try {
+      return await this.http
+        .postRaw<AttachmentResponse>(
+          `/api/catalog/pvt/attachment`,
+          AttachmentData
+        )
+        .then(async res => {
+          sleep(300)
+          return await this.setSkuAttachment(res.data.Id)
+        })
+    } catch (e) {
+      console.log('att: ' + e)
+      return false
+    }
+  }
+
+  public setSkuAttachment = async (attachmentId: any) => {
+    console.log('Setting Sku Attachment...')
+    try {
+      const skus = [880010, 880011, 880012, 880013]
+      for (const skuId of skus) {
+        await this.http.post(
+          `/api/catalog/pvt/skuattachment`,
+          SkuAttachmentData(skuId, attachmentId)
+        )
+        sleep(300)
+      }
+
+      return true
+    } catch (e) {
+      console.log('skuatt: ' + e)
+      return false
+    }
+  }
+
+  public setSubscription = async () => {
+    console.log('Setting Subscription...')
+    try {
+      return await this.http
+        .postRaw<AttachmentResponse>(
+          `/api/catalog/pvt/attachment`,
+          SubscriptionData
+        )
+        .then(async res => {
+          sleep(300)
+          return await this.setSkuAttachment(res.data.Id)
+        })
+    } catch (e) {
+      console.log('subs: ' + e)
+      return false
+    }
+  }
+
+  public setSkuSubscription = async (attachmentId: any) => {
+    console.log('Setting Sku Subscription...')
+    try {
+      const skus = [
+        880260,
+        880270,
+        880280,
+        880290,
+        880300,
+        880310,
+        880320,
+        880390,
+      ]
+      for (const skuId of skus) {
+        await this.http.post(
+          `/api/catalog/pvt/skuattachment`,
+          SkuAttachmentData(skuId, attachmentId)
+        )
+        sleep(300)
+      }
+
+      return true
+    } catch (e) {
+      console.log('skusubs: ' + e)
+      return false
+    }
+  }
+}

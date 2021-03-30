@@ -1,0 +1,6 @@
+{
+  "admin.app.easy-setup": {
+    "component": "AdminHome",
+    "path": "/admin/app/easy-setup"
+  }
+}

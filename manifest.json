@@ -1,0 +1,104 @@
+{
+  "name": "easy-setup",
+  "vendor": "vtex",
+  "version": "1.0.0",
+  "title": "Easy Setup",
+  "description": "Populate the store with a basic setup to B2C and B2B schemas.",
+  "mustUpdateAt": "",
+  "categories": [],
+  "dependencies": {
+    "vtex.styleguide": "9.x"
+  },
+  "scripts": {
+    "prereleasy": "bash lint.sh"
+  },
+  "registries": [
+    "smartcheckout"
+  ],
+  "billingOptions": {
+    "free": true
+  },
+  "builders": {
+    "react": "3.x",
+    "admin": "0.x",
+    "messages": "1.x",
+    "node": "6.x",
+    "docs": "0.x"
+  },
+  "credentialType": "absolute",
+  "policies": [
+    {
+      "name": "colossus-fire-event"
+    },
+    {
+      "name": "colossus-write-logs"
+    },
+    {
+      "name": "ADMIN_CRM"
+    },
+    {
+      "name": "POWER_USER_CRM"
+    },
+    {
+      "name": "ADMIN_DS"
+    },
+    {
+      "name": "POWER_USER_DS"
+    },
+    {
+      "name": "OMSViewer"
+    },
+    {
+      "name": "WorkflowAction"
+    },
+    {
+      "name": "Changes"
+    },
+    {
+      "name": "ShippingAction"
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexcommercestable.com.br",
+        "path": "/api/catalog/pvt/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "api.vtex.com",
+        "path": "/{{account}}/pricing/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexcommercestable.com.br",
+        "path": "/api/logistics/pvt/inventory/skus/*"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexpayments.com.br",
+        "path": "/api/pvt/affiliations"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "{{account}}.vtexpayments.com.br",
+        "path": "/api/pvt/rules"
+      }
+    },
+    {
+      "name": "outbound-access",
+      "attrs": {
+        "host": "api.vtex.com",
+        "path": "/{{account}}/dataentities/*"
+      }
+    }
+  ],
+  "$schema": "https://raw.githubusercontent.com/vtex/node-vtex-api/master/gen/manifest.schema"
+}

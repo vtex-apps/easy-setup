@@ -1,0 +1,145 @@
+import { ExternalClient, IOContext } from '@vtex/api'
+import axios from 'axios'
+
+import {
+  CustomPrices,
+  FixedPrice,
+  PriceData,
+  PriceTableData,
+} from '../dataSources/priceData'
+import { SKUData } from '../dataSources/skuData'
+
+export interface IPricing {
+  setPrice(): any
+  setPriceTables(): any
+  setPricing(): any
+  setFixedPrice(skuId: any): any
+}
+
+export default class Pricing extends ExternalClient {
+  constructor(ctx: IOContext) {
+    super(`http://api.vtex.com`, ctx)
+  }
+
+  public getHeaders = () => {
+    return {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+      'Proxy-Authorization': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-credential'],
+      'X-VTEX-API-AppKey': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-api-appkey'],
+      'X-VTEX-API-AppToken': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-api-apptoken'],
+      'X-Vtex-Use-Https': true,
+    }
+  }
+
+  public setPrice = async () => {
+    console.log('Set Prices...')
+    try {
+      const account = JSON.parse(JSON.stringify(this.context)).request.header[
+        'x-vtex-account'
+      ]
+
+      SKUData.forEach(async sku => {
+        if (sku.Id == 880100) {
+          this.setFixedPrice(sku.Id)
+        }
+
+        if (sku.Id == 880320 || sku.Id == 880321) {
+          this.setCustomPrice(sku.Id)
+        } else {
+          await axios({
+            method: 'PUT',
+            url: `${this.options?.baseURL}/${account}/pricing/prices/${sku.Id}`,
+            headers: this.getHeaders(),
+            data: PriceData,
+          })
+        }
+      })
+
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  public setFixedPrice = async (skuId: any) => {
+    console.log('Set Fixed Price...')
+    try {
+      const account = JSON.parse(JSON.stringify(this.context)).request.header[
+        'x-vtex-account'
+      ]
+
+      return await axios({
+        method: 'PUT',
+        url: `${this.options?.baseURL}/${account}/pricing/prices/${skuId}`,
+        headers: this.getHeaders(),
+        data: FixedPrice,
+      }).then(() => {
+        return true
+      })
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  public setCustomPrice = async (skuId: any) => {
+    console.log('Set Custom Price...')
+    try {
+      const account = JSON.parse(JSON.stringify(this.context)).request.header[
+        'x-vtex-account'
+      ]
+
+      const i = skuId == 880320 ? 1 : 2
+
+      return await axios({
+        method: 'PUT',
+        url: `${this.options?.baseURL}/${account}/pricing/prices/${skuId}`,
+        headers: this.getHeaders(),
+        data: CustomPrices[i],
+      }).then(() => {
+        return true
+      })
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  public setPriceTables = async () => {
+    console.log('Set Price Tables...')
+    try {
+      const account = JSON.parse(JSON.stringify(this.context)).request.header[
+        'x-vtex-account'
+      ]
+
+      PriceTableData.forEach(async priceTableData => {
+        await axios({
+          method: 'POST',
+          url:
+            `${this.options?.baseURL}/${account}/pricing/pipeline/catalog/` +
+            priceTableData.name,
+          headers: this.getHeaders(),
+          data: priceTableData.priceTable,
+        })
+      })
+
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  public setPricing = async () => {
+    const priceRes = await this.setPrice()
+    const priceTablesRes = await this.setPriceTables()
+
+    return priceRes && priceTablesRes
+  }
+}

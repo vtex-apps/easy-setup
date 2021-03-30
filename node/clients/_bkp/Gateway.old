@@ -1,0 +1,96 @@
+import axios from 'axios'
+import { ExternalClient, IOContext } from '@vtex/api'
+import {
+  PromissoryData,
+  AffiliationData,
+  PaymentConditionData,
+} from '../dataSources/paymentData'
+
+export interface IGateway {
+  setPayment(): any
+  setAffiliation(): any
+}
+
+export default class Gateway extends ExternalClient implements IGateway {
+  constructor(ctx: IOContext) {
+    super(
+      `http://${
+        JSON.parse(JSON.stringify(ctx)).request.header['x-vtex-account']
+      }.vtexcommercestable.com.br`,
+      ctx
+    )
+  }
+
+  public getHeaders = () => {
+    return {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+      'Proxy-Authorization': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-credential'],
+      'X-VTEX-API-AppKey': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-api-appkey'],
+      'X-VTEX-API-AppToken': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-api-apptoken'],
+      'X-Vtex-Use-Https': true,
+    }
+  }
+
+  public setPayment = async () => {
+    try {
+      console.log('Set Payment...')
+      return await axios({
+        method: 'POST',
+        url: `${this.options?.baseURL}/api/payments/pvt/promissories/201/config`,
+        headers: this.getHeaders(),
+        data: PromissoryData,
+      }).then(async () => {
+        return await this.setAffiliation()
+      })
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  public setAffiliation = async () => {
+    try {
+      console.log('Set Affiliations...')
+
+      for (var i = 0; i < AffiliationData.length; i++) {
+        await axios({
+          method: 'POST',
+          url: `${this.options?.baseURL}/api/payments/pvt/affiliations`,
+          headers: this.getHeaders(),
+          data: AffiliationData[i],
+        }).then(async res => {
+          const affiliationId = JSON.parse(JSON.stringify(res.data)).id
+          return await this.setPaymentCondition(i, affiliationId)
+        })
+      }
+
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  private setPaymentCondition = async (index: any, affiliationId: any) => {
+    try {
+      console.log('Set Payment Condition...')
+
+      return await axios({
+        method: 'POST',
+        url: `${this.options?.baseURL}/api/payments/pvt/rules`,
+        headers: this.getHeaders(),
+        data: PaymentConditionData(affiliationId)[index],
+      }).then(() => {
+        return true
+      })
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+}

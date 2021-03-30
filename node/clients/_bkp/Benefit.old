@@ -1,0 +1,86 @@
+import axios from 'axios'
+import { ExternalClient, IOContext } from '@vtex/api'
+import { BenefitData, TaxData } from '../dataSources/benefitsData'
+
+export interface IBenefit {
+  setBenefit(): any
+  setTaxes(): any
+}
+
+export default class Benefit extends ExternalClient implements IBenefit {
+  constructor(ctx: IOContext) {
+    super(
+      `http://${
+        JSON.parse(JSON.stringify(ctx)).request.header['x-vtex-account']
+      }.vtexcommercestable.com.br`,
+      ctx
+    )
+  }
+
+  public getHeaders = () => {
+    return {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+      'Proxy-Authorization': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-credential'],
+      'X-VTEX-API-AppKey': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-api-appkey'],
+      'X-VTEX-API-AppToken': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-api-apptoken'],
+      'X-Vtex-Use-Https': true,
+    }
+  }
+
+  public setBenefit = async () => {
+    console.log('Set Benefit...')
+    try {
+      await axios({
+        method: 'POST',
+        url: `${this.options?.baseURL}/api/rnb/pvt/calculatorconfiguration`,
+        headers: this.getHeaders(),
+        data: BenefitData(await this.getCollection()),
+      })
+
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  public setTaxes = async () => {
+    console.log('Set Taxes...')
+    try {
+      for (const tax of TaxData) {
+        await axios({
+          method: 'POST',
+          url: `${this.options?.baseURL}/api/rnb/pvt/calculatorconfiguration`,
+          headers: this.getHeaders(),
+          data: tax,
+        })
+      }
+
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+
+  public getCollection = async () => {
+    console.log('Get Collection...')
+    try {
+      return await axios({
+        method: 'GET',
+        url: `${this.options?.baseURL}/api/rnb/pvt/collections/_`,
+        headers: this.getHeaders(),
+      }).then(async res => {
+        return res.data[0]
+      })
+    } catch (e) {
+      console.log(e)
+      return null
+    }
+  }
+}

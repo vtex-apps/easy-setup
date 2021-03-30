@@ -1,0 +1,64 @@
+import axios from 'axios'
+import { ExternalClient, IOContext, InstanceOptions } from '@vtex/api'
+import { UsersData } from '../../dataSources/usersData'
+
+export interface IMasterdata {
+  createUsers(): any
+}
+
+export default class Masterdata extends ExternalClient implements IMasterdata {
+  constructor(ctx: IOContext, options?: InstanceOptions) {
+    super(
+      `http://api.vtexcrm.com.br/${
+        JSON.parse(JSON.stringify(ctx)).request.header['x-vtex-account']
+      }`,
+      ctx,
+      {
+        ...options,
+        timeout: 30000,
+        params: {
+          ...options?.params,
+          an: ctx.account,
+        },
+        headers: {
+          ...options?.headers,
+          VtexIdclientAutCookie: ctx.authToken,
+        },
+      }
+    )
+  }
+
+  public getHeaders = () => {
+    return {
+      Accept: 'application/json',
+      'Content-Type': 'application/json',
+      'Cache-Control': 'no-cache',
+      'Proxy-Authorization': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-credential'],
+      'X-VTEX-API-AppKey': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-api-appkey'],
+      'X-VTEX-API-AppToken': JSON.parse(JSON.stringify(this.context)).request
+        .header['x-vtex-api-apptoken'],
+      'X-Vtex-Use-Https': true,
+    }
+  }
+
+  public createUsers = async () => {
+    console.log('Creating Users...')
+    try {
+      for (const userData of UsersData) {
+        await axios({
+          method: 'POST',
+          url: `${this.options?.baseURL}/dataentities/CL/documents`,
+          headers: this.getHeaders(),
+          data: userData,
+        })
+      }
+
+      return true
+    } catch (e) {
+      console.log(e)
+      return false
+    }
+  }
+}
