@@ -534,8 +534,3 @@ Payment Conditions:
 ```
 
 </details>
-
-## Support
-
-- Developers: [renan.servare@b8one.com](mailto:renan.servare@b8one.com)
-- Site: [www.b8one.com](www.b8one.com)
