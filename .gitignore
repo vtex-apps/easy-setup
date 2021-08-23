@@ -45,6 +45,7 @@ render_build
 accounts
 
 .vscode
+.idea
 
 lib
 
