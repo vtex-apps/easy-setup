@@ -5,6 +5,7 @@ import {
 import { ImagesData } from '../../dataSources/imageData'
 import { ProductData } from '../../dataSources/productData'
 import { SKUData } from '../../dataSources/skuData'
+import {sleep} from '../../utils/index'
 
 export async function ProductsMiddleware(
   ctx: PopulateContext,
@@ -36,9 +37,10 @@ export async function ProductsMiddleware(
       ProductData.map(product => catalogClient.createProduct(product))
     )
 
-    const productSkus = await Promise.all(
-      SKUData.map(productSku => catalogClient.createSKU(productSku))
-    )
+    for await (const sku of SKUData) {
+      await catalogClient.createSKU(sku)
+      await sleep(100)
+    }
 
     const attachments = await Promise.all(
       [AttachmentData, SubscriptionData].map(attachment =>
@@ -70,7 +72,7 @@ export async function ProductsMiddleware(
       Products: {
         results: {
           products,
-          productSkus,
+          //productSkus,
           attachments,
           productSkusAttachments,
           productSkuImages,

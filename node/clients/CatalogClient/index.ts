@@ -16,6 +16,7 @@ import type {
   IBrand,
   ICollectionPayload,
   ICollectionResponse,
+  ISKUPayload,
   ISubCollectionPayload,
   ISubCollectionResponse,
 } from './types'
@@ -112,8 +113,33 @@ export default class CatalogClient extends ExternalClient {
   ): Promise<CreateProductResponse> =>
     this.post<CreateProductResponse>('/api/catalog/pvt/product', data)
 
-  public createSKU = (data: any) =>
-    this.post<CreateProductResponse>('/api/catalog/pvt/stockkeepingunit', data)
+  /*public createSKU = (
+      data: ISKUPayload
+    ): Promise<ISKUPayload> =>
+      this.post<ISKUPayload>('/api/catalog/pvt/stockkeepingunit', data)
+  */
+
+  public async createSKU(skuPayLoad: ISKUPayload): Promise<IOResponse<ISKUPayload>> {
+    try {
+      return await this.http.post(`/api/catalog/pvt/stockkeepingunit`, skuPayLoad)
+    }
+    catch (error) {
+      const {
+        response: { data, status },
+        headers,
+      } = error
+      console.log(skuPayLoad.Id + '-RefId:' + skuPayLoad.RefId + '-ProductId:' + skuPayLoad.ProductId)
+      console.log(error)
+      return {
+        data,
+        headers,
+        status,
+      }
+    }
+    finally {
+
+    }
+  }
 
   public createSKUFile = (skuId: string | number, data: CreateSKUFileData) =>
     this.post<CreateSKUFileResponse>(
