@@ -5,7 +5,7 @@ import {
 import { ImagesData } from '../../dataSources/imageData'
 import { ProductData } from '../../dataSources/productData'
 import { SKUData } from '../../dataSources/skuData'
-import {sleep} from '../../utils/index'
+import { sleep } from '../../utils/index'
 
 export async function ProductsMiddleware(
   ctx: PopulateContext,
@@ -72,7 +72,7 @@ export async function ProductsMiddleware(
       Products: {
         results: {
           products,
-          //productSkus,
+          // productSkus,
           attachments,
           productSkusAttachments,
           productSkuImages,
