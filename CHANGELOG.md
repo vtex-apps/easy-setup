@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
+## [0.0.10] - 2021-12-07
+
 ## [1.8.3] - 2021-03-19
 ### Fixed
 - Refact pricing seed to respect API rate limit

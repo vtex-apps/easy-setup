@@ -1,7 +1,7 @@
 {
   "name": "easy-setup",
   "vendor": "vtex",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "title": "Easy Setup",
   "description": "Populate the store with a basic setup to B2C and B2B schemas.",
   "mustUpdateAt": "",
