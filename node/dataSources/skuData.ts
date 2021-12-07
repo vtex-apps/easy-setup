@@ -2,7 +2,7 @@ const SKUData = [
   {
     Id: 880010,
     ProductId: '880001',
-    IsActive: true,
+    IsActive: false,
     Name: 'S',
     RefId: '880010a',
     Height: 10,
@@ -29,7 +29,7 @@ const SKUData = [
   {
     Id: 880011,
     ProductId: '880001',
-    IsActive: true,
+    IsActive: false,
     Name: 'M',
     RefId: '880011a',
     Height: 10,
@@ -56,7 +56,7 @@ const SKUData = [
   {
     Id: 880012,
     ProductId: '880001',
-    IsActive: true,
+    IsActive: false,
     Name: 'L',
     RefId: '880012a',
     Height: 10,
@@ -83,7 +83,7 @@ const SKUData = [
   {
     Id: 880013,
     ProductId: '880001',
-    IsActive: true,
+    IsActive: false,
     Name: 'XL',
     RefId: '880013a',
     Height: 10,
@@ -110,7 +110,7 @@ const SKUData = [
   {
     Id: 880020,
     ProductId: '880002',
-    IsActive: true,
+    IsActive: false,
     Name: 'S',
     RefId: '880020a',
     Height: 10,
@@ -137,7 +137,7 @@ const SKUData = [
   {
     Id: 880021,
     ProductId: '880002',
-    IsActive: true,
+    IsActive: false,
     Name: 'M',
     RefId: '880021a',
     Height: 10,
@@ -164,7 +164,7 @@ const SKUData = [
   {
     Id: 880022,
     ProductId: '880002',
-    IsActive: true,
+    IsActive: false,
     Name: 'L',
     RefId: '880022a',
     Height: 10,
@@ -191,7 +191,7 @@ const SKUData = [
   {
     Id: 880023,
     ProductId: '880002',
-    IsActive: true,
+    IsActive: false,
     Name: 'XL',
     RefId: '880023a',
     Height: 10,
@@ -218,7 +218,7 @@ const SKUData = [
   {
     Id: 880030,
     ProductId: '880003',
-    IsActive: true,
+    IsActive: false,
     Name: 'S',
     RefId: '880030a',
     Height: 10,
@@ -245,7 +245,7 @@ const SKUData = [
   {
     Id: 880031,
     ProductId: '880003',
-    IsActive: true,
+    IsActive: false,
     Name: 'M',
     RefId: '880031a',
     Height: 10,
@@ -272,7 +272,7 @@ const SKUData = [
   {
     Id: 880032,
     ProductId: '880003',
-    IsActive: true,
+    IsActive: false,
     Name: 'L',
     RefId: '880032a',
     Height: 10,
@@ -299,7 +299,7 @@ const SKUData = [
   {
     Id: 880033,
     ProductId: '880003',
-    IsActive: true,
+    IsActive: false,
     Name: 'XL',
     RefId: '880033a',
     Height: 10,
@@ -326,7 +326,7 @@ const SKUData = [
   {
     Id: 880040,
     ProductId: '880004',
-    IsActive: true,
+    IsActive: false,
     Name: 'S',
     RefId: '880040a',
     Height: 10,
@@ -353,7 +353,7 @@ const SKUData = [
   {
     Id: 880041,
     ProductId: '880004',
-    IsActive: true,
+    IsActive: false,
     Name: 'M',
     RefId: '880041a',
     Height: 10,
@@ -380,7 +380,7 @@ const SKUData = [
   {
     Id: 880042,
     ProductId: '880004',
-    IsActive: true,
+    IsActive: false,
     Name: 'L',
     RefId: '880042a',
     Height: 10,
@@ -407,7 +407,7 @@ const SKUData = [
   {
     Id: 880043,
     ProductId: '880004',
-    IsActive: true,
+    IsActive: false,
     Name: 'XL',
     RefId: '880043a',
     Height: 10,
@@ -434,7 +434,7 @@ const SKUData = [
   {
     Id: 880050,
     ProductId: '880005',
-    IsActive: true,
+    IsActive: false,
     Name: '8',
     RefId: '880050a',
     Height: 10,
@@ -461,7 +461,7 @@ const SKUData = [
   {
     Id: 880051,
     ProductId: '880005',
-    IsActive: true,
+    IsActive: false,
     Name: '9',
     RefId: '880051a',
     Height: 10,
@@ -488,7 +488,7 @@ const SKUData = [
   {
     Id: 880052,
     ProductId: '880005',
-    IsActive: true,
+    IsActive: false,
     Name: '10',
     RefId: '880052a',
     Height: 10,
@@ -515,7 +515,7 @@ const SKUData = [
   {
     Id: 880053,
     ProductId: '880005',
-    IsActive: true,
+    IsActive: false,
     Name: '11',
     RefId: '880053a',
     Height: 10,
@@ -542,7 +542,7 @@ const SKUData = [
   {
     Id: 880054,
     ProductId: '880005',
-    IsActive: true,
+    IsActive: false,
     Name: '12',
     RefId: '880054a',
     Height: 10,
@@ -569,7 +569,7 @@ const SKUData = [
   {
     Id: 880060,
     ProductId: '880006',
-    IsActive: true,
+    IsActive: false,
     Name: '8',
     RefId: '880060a',
     Height: 10,
@@ -596,7 +596,7 @@ const SKUData = [
   {
     Id: 880061,
     ProductId: '880006',
-    IsActive: true,
+    IsActive: false,
     Name: '9',
     RefId: '880061a',
     Height: 10,
@@ -623,7 +623,7 @@ const SKUData = [
   {
     Id: 880062,
     ProductId: '880006',
-    IsActive: true,
+    IsActive: false,
     Name: '10',
     RefId: '880062a',
     Height: 10,
@@ -650,7 +650,7 @@ const SKUData = [
   {
     Id: 880063,
     ProductId: '880006',
-    IsActive: true,
+    IsActive: false,
     Name: '11',
     RefId: '880063a',
     Height: 10,
@@ -677,7 +677,7 @@ const SKUData = [
   {
     Id: 880064,
     ProductId: '880006',
-    IsActive: true,
+    IsActive: false,
     Name: '12',
     RefId: '880064a',
     Height: 10,
@@ -704,7 +704,7 @@ const SKUData = [
   {
     Id: 880070,
     ProductId: '880007',
-    IsActive: true,
+    IsActive: false,
     Name: '8',
     RefId: '880070a',
     Height: 10,
@@ -731,7 +731,7 @@ const SKUData = [
   {
     Id: 880071,
     ProductId: '880007',
-    IsActive: true,
+    IsActive: false,
     Name: '9',
     RefId: '880071a',
     Height: 10,
@@ -758,7 +758,7 @@ const SKUData = [
   {
     Id: 880072,
     ProductId: '880007',
-    IsActive: true,
+    IsActive: false,
     Name: '10',
     RefId: '880072a',
     Height: 10,
@@ -785,7 +785,7 @@ const SKUData = [
   {
     Id: 880073,
     ProductId: '880007',
-    IsActive: true,
+    IsActive: false,
     Name: '11',
     RefId: '880073a',
     Height: 10,
@@ -812,7 +812,7 @@ const SKUData = [
   {
     Id: 880074,
     ProductId: '880007',
-    IsActive: true,
+    IsActive: false,
     Name: '12',
     RefId: '880074a',
     Height: 10,
@@ -839,7 +839,7 @@ const SKUData = [
   {
     Id: 880080,
     ProductId: '880008',
-    IsActive: true,
+    IsActive: false,
     Name: '8',
     RefId: '880080a',
     Height: 10,
@@ -866,7 +866,7 @@ const SKUData = [
   {
     Id: 880081,
     ProductId: '880008',
-    IsActive: true,
+    IsActive: false,
     Name: '9',
     RefId: '880081a',
     Height: 10,
@@ -893,7 +893,7 @@ const SKUData = [
   {
     Id: 880082,
     ProductId: '880008',
-    IsActive: true,
+    IsActive: false,
     Name: '10',
     RefId: '880082a',
     Height: 10,
@@ -920,7 +920,7 @@ const SKUData = [
   {
     Id: 880083,
     ProductId: '880008',
-    IsActive: true,
+    IsActive: false,
     Name: '11',
     RefId: '880083a',
     Height: 10,
@@ -947,7 +947,7 @@ const SKUData = [
   {
     Id: 880084,
     ProductId: '880008',
-    IsActive: true,
+    IsActive: false,
     Name: '12',
     RefId: '880084a',
     Height: 10,
@@ -974,7 +974,7 @@ const SKUData = [
   {
     Id: 880090,
     ProductId: '880009',
-    IsActive: true,
+    IsActive: false,
     Name:
       'BLACK+DECKER 20V MAX Drill & Home Tool Kit, 68 Piece (LDX120PK),Black/Orange',
     RefId: '880090a',
@@ -1002,7 +1002,7 @@ const SKUData = [
   {
     Id: 880100,
     ProductId: '880010',
-    IsActive: true,
+    IsActive: false,
     Name:
       'BLACK+DECKER 20V MAX Cordless Drill / Driver with 30-Piece Accessories (LD120VA)',
     RefId: '880100a',
@@ -1030,7 +1030,7 @@ const SKUData = [
   {
     Id: 880110,
     ProductId: '880011',
-    IsActive: true,
+    IsActive: false,
     Name:
       'BLACK+DECKER 20V Max Cordless Chainsaw, 10-Inch, Tool Only (LCS1020B)',
     RefId: '880110a',
@@ -1058,7 +1058,7 @@ const SKUData = [
   {
     Id: 880120,
     ProductId: '880012',
-    IsActive: true,
+    IsActive: false,
     Name:
       'BLACK+DECKER 20V MAX Cordless Drill Combo Kit, 2-Tool (BD2KITCDDI),Black/Orange Impact Combo Kit',
     RefId: '880120a',
@@ -1086,7 +1086,7 @@ const SKUData = [
   {
     Id: 880130,
     ProductId: '880013',
-    IsActive: true,
+    IsActive: false,
     Name:
       'BLACK+DECKER 20V MAX 5-1/2-Inch Cordless Circular Saw, Tool Only (BDCCS20B)',
     RefId: '880130a',
@@ -1114,7 +1114,7 @@ const SKUData = [
   {
     Id: 880140,
     ProductId: '880014',
-    IsActive: true,
+    IsActive: false,
     Name: 'BLACK+DECKER 20V MAX 5-1/2-Inch Cordless Circular Saw (BDCCS20C)',
     RefId: '880140a',
     Height: 10,
@@ -1141,7 +1141,7 @@ const SKUData = [
   {
     Id: 880150,
     ProductId: '880015',
-    IsActive: true,
+    IsActive: false,
     Name: 'Acer Aspire Z24-890-UA91 AIO Desktop - Windows 10',
     RefId: '880150a',
     Height: 10,
@@ -1168,7 +1168,7 @@ const SKUData = [
   {
     Id: 880160,
     ProductId: '880016',
-    IsActive: true,
+    IsActive: false,
     Name: 'Lenovo IdeaCentre AIO 3 - Windows 10',
     RefId: '880160a',
     Height: 10,
@@ -1195,7 +1195,7 @@ const SKUData = [
   {
     Id: 880170,
     ProductId: '880017',
-    IsActive: true,
+    IsActive: false,
     Name: 'Acer Aspire TC-885-UA92 Desktop - Windows 10',
     RefId: '880170a',
     Height: 10,
@@ -1222,7 +1222,7 @@ const SKUData = [
   {
     Id: 880180,
     ProductId: '880018',
-    IsActive: true,
+    IsActive: false,
     Name: 'CYBERPOWERPC Gamer Xtreme VR Gaming PC - Windows 10',
     RefId: '880180a',
     Height: 10,
@@ -1249,7 +1249,7 @@ const SKUData = [
   {
     Id: 880190,
     ProductId: '880019',
-    IsActive: true,
+    IsActive: false,
     Name: 'Acer Aspire 5 Slim Laptop - Windows 10',
     RefId: '880190a',
     Height: 10,
@@ -1276,7 +1276,7 @@ const SKUData = [
   {
     Id: 880200,
     ProductId: '880020',
-    IsActive: true,
+    IsActive: false,
     Name: 'Jumper EZbook X3 Windows 10 Laptop',
     RefId: '880200a',
     Height: 10,
@@ -1303,7 +1303,7 @@ const SKUData = [
   {
     Id: 880400,
     ProductId: '880040',
-    IsActive: true,
+    IsActive: false,
     Name: 'Acer Aspire z24 890 + Acer Aspire ATC 885',
     RefId: '880400a',
     Height: 10,
@@ -1330,7 +1330,7 @@ const SKUData = [
   {
     Id: 880210,
     ProductId: '880021',
-    IsActive: true,
+    IsActive: false,
     Name: 'Weber 45010001 Spirit II E-310 3-Burner Liquid Propane Grill, Black',
     RefId: '880210a',
     Height: 10,
@@ -1357,7 +1357,7 @@ const SKUData = [
   {
     Id: 880220,
     ProductId: '880022',
-    IsActive: true,
+    IsActive: false,
     Name:
       'iRobot Roomba 675 Robot Vacuum-Wi-Fi Connectivity, Works with Alexa, Good for Pet Hair, Carpets, Hard Floors, Self-Charging',
     RefId: '880220a',
@@ -1385,7 +1385,7 @@ const SKUData = [
   {
     Id: 880230,
     ProductId: '880023',
-    IsActive: true,
+    IsActive: false,
     Name:
       'ALROCKET Dehumidifier 35oz(1000ml) Small Dehumidifier for 2100 Cubic Feet (260 sq ft) Portable and Compact Ultra Quiet',
     RefId: '880230a',
@@ -1413,7 +1413,7 @@ const SKUData = [
   {
     Id: 880240,
     ProductId: '880024',
-    IsActive: true,
+    IsActive: false,
     Name: 'McCulloch MC1375 Canister Steam Cleaner with 20 Accessories',
     RefId: '880240a',
     Height: 10,
@@ -1440,7 +1440,7 @@ const SKUData = [
   {
     Id: 880250,
     ProductId: '880025',
-    IsActive: true,
+    IsActive: false,
     Name: 'Cuisinart GR-4N 5-in-1 Griddler',
     RefId: '880250a',
     Height: 10,
@@ -1467,7 +1467,7 @@ const SKUData = [
   {
     Id: 880260,
     ProductId: '880026',
-    IsActive: true,
+    IsActive: false,
     Name: 'Yellow Onions (10 lbs.)',
     RefId: '880260a',
     Height: 10,
@@ -1494,7 +1494,7 @@ const SKUData = [
   {
     Id: 880270,
     ProductId: '880027',
-    IsActive: true,
+    IsActive: false,
     Name: 'Cauliflower Fresh',
     RefId: '880270a',
     Height: 10,
@@ -1521,7 +1521,7 @@ const SKUData = [
   {
     Id: 880280,
     ProductId: '880028',
-    IsActive: true,
+    IsActive: false,
     Name: 'Asparagus Green Conventional',
     RefId: '880280a',
     Height: 10,
@@ -1548,7 +1548,7 @@ const SKUData = [
   {
     Id: 880290,
     ProductId: '880029',
-    IsActive: true,
+    IsActive: false,
     Name: 'Fresh Hass Avocadoes',
     RefId: '880290a',
     Height: 10,
@@ -1575,7 +1575,7 @@ const SKUData = [
   {
     Id: 880300,
     ProductId: '880030',
-    IsActive: true,
+    IsActive: false,
     Name: 'Fresh Coconuts',
     RefId: '880300a',
     Height: 10,
@@ -1602,7 +1602,7 @@ const SKUData = [
   {
     Id: 880310,
     ProductId: '880031',
-    IsActive: true,
+    IsActive: false,
     Name: 'Whole Watermelon Mini Fresh',
     RefId: '880310a',
     Height: 10,
@@ -1629,7 +1629,7 @@ const SKUData = [
   {
     Id: 880320,
     ProductId: '880032',
-    IsActive: true,
+    IsActive: false,
     Name: 'Pack of 1',
     RefId: '880320a',
     Height: 10,
@@ -1656,7 +1656,7 @@ const SKUData = [
   {
     Id: 880321,
     ProductId: '880032',
-    IsActive: true,
+    IsActive: false,
     Name: 'Pack of 12',
     RefId: '880321a',
     Height: 10,
@@ -1683,7 +1683,7 @@ const SKUData = [
   {
     Id: 880330,
     ProductId: '880033',
-    IsActive: true,
+    IsActive: false,
     Name: '2020 APACHE AS1040',
     RefId: '880330a',
     Height: 10,
@@ -1710,7 +1710,7 @@ const SKUData = [
   {
     Id: 880340,
     ProductId: '880034',
-    IsActive: true,
+    IsActive: false,
     Name: '2 POST CANOPY',
     RefId: '880340a',
     Height: 10,
@@ -1737,7 +1737,7 @@ const SKUData = [
   {
     Id: 880350,
     ProductId: '880035',
-    IsActive: true,
+    IsActive: false,
     Name: '2020 AMACSA PH390',
     RefId: '880350a',
     Height: 10,
@@ -1764,7 +1764,7 @@ const SKUData = [
   {
     Id: 880360,
     ProductId: '880036',
-    IsActive: true,
+    IsActive: false,
     Name: 'Faceplate Combine Snout',
     RefId: '880360a',
     Height: 10,
@@ -1791,7 +1791,7 @@ const SKUData = [
   {
     Id: 880370,
     ProductId: '880037',
-    IsActive: true,
+    IsActive: false,
     Name: '2016 MK MARTIN ENT MKGB788 Blades/Box Scraper',
     RefId: '880370a',
     Height: 10,
@@ -1818,7 +1818,7 @@ const SKUData = [
   {
     Id: 880380,
     ProductId: '880038',
-    IsActive: true,
+    IsActive: false,
     Name: '1998 JOHN DEERE 8400T',
     RefId: '880380a',
     Height: 10,
